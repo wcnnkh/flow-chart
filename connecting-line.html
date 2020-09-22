@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
+		<script type="text/javascript" src="js/flow-chart.js"></script>
+	</head>
+	<style>
+		#div1,
+		#div2 {
+			width: 40px;
+			height: 40px;
+			position: absolute;
+			background-color: red;
+			text-align: center;
+		}
+		
+		#div1 {
+			left: 400px;
+			top: 300px;
+			height: 100px;
+		}
+		
+		#div2 {
+			left: 240px;
+			top: 320px;
+			width: 100px;
+			height: 200px;
+			cursor: move;
+		}
+	</style>
+
+	<body>
+		<div id="div1"></div>
+		<div id="div2">这个是可以移动的</div>
+	</body>
+	<script>
+		var line;
+		var move = false;
+		$(function() {
+			$(window).mousedown(function() {
+				console.log("mousedown")
+				move = true;
+			});
+
+			$(window).on("touchstart", function() {
+				console.log("touchstart")
+				move = true;
+			})
+
+			$(window).on("touchend", function() {
+				console.log("touchend")
+				move = false;
+			})
+
+			$(window).mouseup(function() {
+				console.log("mouseup")
+				move = false;
+			});
+
+			$(window).mousemove(function(e) {
+				moveDiv(e);
+			})
+
+			$(window).on("touchmove", function(e) {
+				// 如果这个元素的位置内只有一个手指的话
+				var event = e.originalEvent;
+				if(event.targetTouches.length == 1) {　　　　
+					var touch = event.targetTouches[0];
+					// 把元素放在手指所在的位置
+					moveDiv(touch);
+				}
+			})
+
+			line = $("#div1").connectingLine("#div2");
+		})
+
+		function moveDiv(e) {
+			if(!move) {
+				return;
+			}
+
+			var left = e.pageX - $("#div2").width() / 2;
+			var top = e.pageY - $("#div2").height() / 2;
+			$("#div2").css({
+				"left": left + "px",
+				"top": top + "px"
+			})
+
+			if(line) {
+				line.remove();
+			}
+
+			line = $("#div1").connectingLine("#div2");
+		}
+	</script>
+
+</html>

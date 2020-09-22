@@ -1,0 +1,13 @@
+div.flow-chart {
+	clear: both;
+}
+
+div.flow-chart-group {
+	float: left;
+	margin: 20px;
+}
+
+div.flow-chart-item {
+	text-align: center;
+	cursor: pointer;
+}

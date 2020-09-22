@@ -4,35 +4,15 @@
 	<head>
 		<meta charset="utf-8" />
 		<title></title>
+		<link rel="stylesheet" href="css/flow-chart.css" />
 		<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
 		<script type="text/javascript" src="js/flow-chart.js"></script>
 	</head>
 	<style>
-		#div1,
-		#div2 {
-			width: 100px;
-			height: 100px;
-			position: absolute;
-			background-color: red;
-			text-align: center;
-		}
-		
-		#div1 {
-			left: 400px;
-			top: 300px;
-		}
-		
-		#div2 {
-			left: 240px;
-			top: 320px;
-			width: 200px;
-			height: 40px;
-		}
+
 	</style>
 
 	<body>
-		<div id="div1"></div>
-		<div id="div2">这个是可以移动的</div>
 	</body>
 	<script>
 		var data = [{
@@ -57,35 +37,7 @@
 		}]
 
 		$(function() {
-			var line = $("#div1").connectingLine("#div2");
-			var move = false;
-			$(window).mousedown(function() {
-				console.log("mousedown")
-				move = true;
-			});
-			$(window).mouseup(function() {
-				console.log("mouseup")
-				move = false;
-			});
-
-			$(window).mousemove(function(e) {
-				if(!move){
-					return ;
-				}
-				var left = e.pageX - $("#div2").width() / 2;
-				var top = e.pageY - $("#div2").height() / 2;
-				console.log(left + "," + top);
-				$("#div2").css({
-					"left": left + "px",
-					"top": top + "px"
-				})
-				
-				if(line){
-					line.remove();
-				}
-				
-				line = $("#div1").connectingLine("#div2");
-			})
+			$(document.body).flowChart(data);
 		})
 	</script>
 

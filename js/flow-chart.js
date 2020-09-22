@@ -23,7 +23,7 @@ jQuery.fn.extend({
 			"height": toUse.height()
 		}
 
-		if(toDetails.left < (fromDetails.left + fromDetails.width) && fromDetails.left < (toDetails.left + toDetails.width) && toDetails.top < (fromDetails.top + fromDetails.height) && fromDetails.top < (toDetails.top + toDetails.height)) {
+		if(toDetails.left <= (fromDetails.left + fromDetails.width) && fromDetails.left <= (toDetails.left + toDetails.width) && toDetails.top <= (fromDetails.top + fromDetails.height) && fromDetails.top <= (toDetails.top + toDetails.height)) {
 			//发生碰撞
 			return;
 		}
@@ -106,9 +106,9 @@ jQuery.fn.extend({
 		return line;
 	},
 
-	flowChart: function(data, lineRoot) {
+	flowChart: function(data, parentItem) {
 		if(!(data instanceof Array)) {
-			throw new Error("数组格式必须为数组");
+			return;
 		}
 
 		var size = data.length;
@@ -116,26 +116,33 @@ jQuery.fn.extend({
 			return;
 		}
 
+		var width = this.width() - 40;
 		var div = document.createElement("div");
-		div.style.textAlign = "center";
-		div.style.margin = "20px auto 40px auto";
+		div.className = "flow-chart";
+		div.style.width = width + "px";
 		this.append(div);
+		var itemWidth = width / size - 40;
+		div = jQuery(div);
 		for(var i = 0; i < size; i++) {
+			var group = document.createElement("div");
+			group.className = "flow-chart-group";
+			group.style.width = itemWidth + "px";
+			div.append(group);
+			group = jQuery(group);
+
 			var config = data[i];
-			var item = document.createElement("span");
+			var item = document.createElement("div");
 			item.style.border = "solid 1px black";
-			item.style.padding = "4px";
-			item.style.margin = "10px"
+			item.style.width = itemWidth + "px";
 			item.innerHTML = config.title;
-			div.appendChild(item);
+			item.className = "flow-chart-item";
+			group.append(item);
 
-			if(lineRoot) {
-				jQuery(lineRoot).connectingLine(item);
+			if(parentItem) {
+				jQuery(parentItem).connectingLine(item);
 			}
 
-			if(config.subsete) {
-				this.flowChart(config.subsete, item);
-			}
+			group.flowChart(config.subsete, item);
 		}
 	}
 })
