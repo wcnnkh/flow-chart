@@ -5,9 +5,14 @@ div.flow-chart {
 div.flow-chart-group {
 	float: left;
 	margin: 20px;
+	text-align: center;
 }
 
 div.flow-chart-item {
 	text-align: center;
 	cursor: pointer;
+	border: solid 1px black;
+	display: inline-block;
+	*display: inline;
+	*zoom: 1;
 }

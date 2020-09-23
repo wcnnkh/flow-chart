@@ -45,7 +45,7 @@ jQuery.fn.extend({
 			"border": "transparent " + borderSize + "px black"
 		});
 
-		if(toLeft >= fromDetails.left && toLeft <= fromDetails.left + fromDetails.width) {
+		if((toLeft >= fromDetails.left && toLeft <= fromDetails.left + fromDetails.width) || (fromLeft >= toDetails.left && fromLeft <= (toDetails.left + toDetails.width))) {
 			var left = toDetails.width >= fromDetails.width ? fromLeft : toLeft;
 			var top = toTop < fromTop ? (toDetails.top + toDetails.height) : (fromDetails.top + fromDetails.height);
 			var width = 0;
@@ -53,9 +53,9 @@ jQuery.fn.extend({
 			line.css({
 				"border-left-style": "solid",
 				"width": width + "px",
-				"height": height + "px",
+				"height": (height - borderSize/4) + "px",
 				"left": left + "px",
-				"top": top + "px"
+				"top": (top + borderSize/4) + "px"
 			});
 		} else if((toTop >= fromDetails.top && toTop <= fromDetails.top + fromDetails.height) || (fromTop >= toDetails.top && fromTop <= (toDetails.top + toDetails.height))) {
 			var left = toLeft > fromLeft ? (fromDetails.left + fromDetails.width) : (toDetails.left + toDetails.width);
@@ -64,9 +64,9 @@ jQuery.fn.extend({
 			var height = 0;
 			line.css({
 				"border-top-style": "solid",
-				"width": width + "px",
+				"width": (width - borderSize/4) + "px",
 				"height": height + "px",
-				"left": left + "px",
+				"left": (left + borderSize/4) + "px",
 				"top": top + "px"
 			});
 		} else if(toLeft >= fromLeft) {
@@ -80,21 +80,26 @@ jQuery.fn.extend({
 				line.css({
 					"border-top-style": "solid",
 					"border-right-style": "solid",
-					"width": width + "px",
+					"width": (width - borderSize/4) + "px",
 					"height": (height - borderSize / 4) + "px",
-					"left": left + "px",
+					"left": (left + borderSize/4) + "px",
 					"top": top + "px"
 				});
 			} else {
-				var left = fromDetails.left + fromDetails.width;
+				var left = fromLeft;
+				var top = toTop;
+				var width = toDetails.left - left;
+				var height = fromDetails.top - top;
+				
+				/*var left = fromDetails.left + fromDetails.width;
 				var top = toDetails.top + toDetails.height;
 				var width = toLeft - left;
-				var height = fromTop - top;
+				var height = fromTop - top;*/
 				line.css({
-					"border-bottom-style": "solid",
-					"border-right-style": "solid",
-					"width": width + "px",
-					"height": height + "px",
+					"border-top-style": "solid",
+					"border-left-style": "solid",
+					"width": (width - borderSize/4) + "px",
+					"height": (height - borderSize/4) + "px",
 					"left": left + "px",
 					"top": top + "px"
 				});
@@ -132,8 +137,6 @@ jQuery.fn.extend({
 
 			var config = data[i];
 			var item = document.createElement("div");
-			item.style.border = "solid 1px black";
-			item.style.width = itemWidth + "px";
 			item.innerHTML = config.title;
 			item.className = "flow-chart-item";
 			group.append(item);
